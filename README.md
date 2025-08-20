@@ -7,8 +7,8 @@ Se priorizó **corregir bugs** primero y luego completar las **funcionalidades**
 
 ## 🚀 Demo y repositorio
 
-- **Repositorio (fork con mi solución):** `<https://github.com/<tu-usuario>/<tu-repo>>`
-- **Demo (Vercel/Netlify, opcional):** `<https://<tu-app>.vercel.app>`
+- **Repositorio (fork con mi solución):** `https://github.com/leancal/frontend-challange`
+- **Demo (Vercel/Netlify, opcional):** `https://frontend-challange-alpha.vercel.app/`
 
 ## ▶️ Cómo correr el proyecto
 
