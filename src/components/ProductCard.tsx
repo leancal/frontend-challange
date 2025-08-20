@@ -1,12 +1,17 @@
-import { Link } from 'react-router-dom'
+
 import { Product } from '../types/Product'
 import './ProductCard.css'
+import { useCart } from '../context/CartContext'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface ProductCardProps {
   product: Product
+  onQuote?: (p: Product) => void
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, onQuote }: ProductCardProps) => {
+  const { add } = useCart()
+  const navigate = useNavigate()
   // Handle product status display
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -16,7 +21,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         return <span className="status-badge status-inactive l1">No disponible</span>
       case 'pending':
         // Handle pending status
-        return <span className="status-badge status-active l1">Disponible</span>
+        return <span className="status-badge status-active l1">Pendiente</span>
       default:
         return null
     }
@@ -24,7 +29,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   // Format price for display
   const formatPrice = (price: number) => {
-    return `$${price.toLocaleString()}` // Missing currency and proper formatting
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      maximumFractionDigits: 0
+    }).format(price)
   }
 
   // Check stock availability
@@ -46,6 +55,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return null
   }
 
+  // habilitamos el botón solo si el producto está activo y con stock
+  const canBuy = product.status === 'active' && product.stock > 0
+
   return (
     <div className="product-card">
       <Link to={`/product/${product.id}`} className="product-link">
@@ -55,7 +67,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div className="image-placeholder">
             <span className="material-icons">image</span>
           </div>
-          
+
           {/* Status Badge */}
           <div className="product-status">
             {getStatusBadge(product.status)}
@@ -74,7 +86,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <span className="material-icons">category</span>
               <span className="l1">{product.category}</span>
             </div>
-            
+
             {getStockStatus(product.stock)}
           </div>
 
@@ -117,12 +129,27 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         <div className="card-actions">
-          <button 
+          <button
             className="btn btn-secondary l1"
+            aria-label={canBuy ? `Agregar ${product.name} al carrito` : 'Producto no disponible'}
             onClick={(e) => {
               e.preventDefault()
-              alert('Función de cotización por implementar')
+              add({ id: product.id, name: product.name, price: product.basePrice }, 1)
+              window.dispatchEvent(new CustomEvent('toast', { detail: { msg: 'Agregado al carrito' } }))
             }}
+            disabled={!canBuy}
+          >
+            <span className="material-icons">add_shopping_cart</span>
+            {canBuy ? 'Agregar' : (product.status === 'pending' ? 'Pendiente' : 'No disponible')}
+          </button>
+          <button
+            className="btn btn-tertiary l1"
+            onClick={(e) => {
+              e.preventDefault()
+              if (onQuote) { onQuote(product); return }
+              navigate(`/product/${product.id}?quote=1`)
+            }}
+            aria-label={`Cotizar ${product.name}`}
           >
             <span className="material-icons">calculate</span>
             Cotizar

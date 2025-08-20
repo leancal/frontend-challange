@@ -9,12 +9,18 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  border-color: #cbd5e1;
+  transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+.btn { transition: background-color .15s ease, transform .05s ease; }
+.btn:active { transform: scale(0.98); }
+
+@media (prefers-reduced-motion: reduce){
+  .product-card, .btn { transition: none; transform: none !important; }
 }
 
 .product-link {
@@ -77,6 +83,11 @@
 .status-pending {
   background: rgba(245, 158, 11, 0.9);
   color: white;
+}
+
+.status-badge.status-pending {
+  background: #fde68a; /* amarillo suave */
+  color: #6b4f00;
 }
 
 /* Product Info */

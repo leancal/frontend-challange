@@ -103,6 +103,9 @@
   }
 }
 
+.spin { animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 @media (max-width: 480px) {
   .page-stats {
     gap: 12px;

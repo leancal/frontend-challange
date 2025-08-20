@@ -8,6 +8,13 @@ interface ProductFiltersProps {
   onCategoryChange: (category: string) => void
   onSearchChange: (search: string) => void
   onSortChange: (sort: string) => void
+  selectedSupplier?: string
+  minPrice?: number
+  maxPrice?: number
+  onSupplierChange?: (supplier: string) => void
+  onMinPriceChange?: (n?: number) => void
+  onMaxPriceChange?: (n?: number) => void
+  onClearFilters?: () => void
 }
 
 const ProductFilters = ({
@@ -16,7 +23,14 @@ const ProductFilters = ({
   sortBy,
   onCategoryChange,
   onSearchChange,
-  onSortChange
+  onSortChange,
+  selectedSupplier = '',
+  minPrice,
+  maxPrice,
+  onSupplierChange,
+  onMinPriceChange,
+  onMaxPriceChange,
+  onClearFilters
 }: ProductFiltersProps) => {
   return (
     <div className="product-filters">
@@ -61,6 +75,45 @@ const ProductFilters = ({
           </div>
         </div>
 
+        <div className="filter-section">
+          <h3 className="filter-title p1-medium">Proveedor</h3>
+          <select
+            className="sort-select p1"
+            value={selectedSupplier}
+            onChange={(e)=> onSupplierChange?.(e.target.value)}
+          >
+            <option value="">Todos</option>
+            {suppliers.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
+        {/* fin cambio */}
+
+        {/* cambia: Rango de precios */}
+        <div className="filter-section">
+          <h3 className="filter-title p1-medium">Precio</h3>
+          <div className="range-row">
+            <input
+              type="number"
+              className="sort-select p1"
+              placeholder="Mín"
+              value={minPrice ?? ''}
+              onChange={(e)=> onMinPriceChange?.(e.target.value ? Number(e.target.value) : undefined)}
+              min={0}
+            />
+            <span className="dash">—</span>
+            <input
+              type="number"
+              className="sort-select p1"
+              placeholder="Máx"
+              value={maxPrice ?? ''}
+              onChange={(e)=> onMaxPriceChange?.(e.target.value ? Number(e.target.value) : undefined)}
+              min={0}
+            />
+          </div>
+        </div>
+
         {/* Sort Options */}
         <div className="filter-section">
           <h3 className="filter-title p1-medium">Ordenar por</h3>
@@ -86,6 +139,12 @@ const ProductFilters = ({
               </div>
             ))}
           </div>
+        </div>
+
+         <div className="filter-actions">
+          <button className="btn btn-tertiary l1" onClick={()=> onClearFilters?.()}>
+            Limpiar filtros
+          </button>
         </div>
       </div>
     </div>

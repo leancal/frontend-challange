@@ -193,3 +193,6 @@
     justify-content: flex-start;
   }
 }
+
+.range-row { display:flex; gap:8px; align-items:center; }
+.range-row .dash { opacity:.6; }

@@ -109,3 +109,17 @@
     display: none;
   }
 }
+
+.cart-link { position: relative; }
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #e11d48;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 2px 6px;
+  line-height: 1;
+}
+.cart-empty { opacity: .6; }
